@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Card</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        body.light-mode {
+            background: #f3f4f6;
+        }
+
+        .weather-card {
+            background: #1e293b;
+            color: white;
+            padding: 25px;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            text-align: center;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-mode .weather-card {
+            background: #ffffff;
+            color: #1f2937;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .weather-card h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 15px;
+            outline: none;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.light-mode select,
+        body.light-mode input {
+            background: #f3f4f6;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #2563eb;
+        }
+
+        body.light-mode .toggle-btn {
+            background: #6366f1;
+        }
+
+        body.light-mode .toggle-btn:hover {
+            background: #4f46e5;
+        }
+
+        .weather-info {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .icon img {
+            width: 90px;
+        }
+
+        .info {
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (min-width: 1024px) {
+            
+        }
+    </style>
+</head>
+
+<body>
+    <button class="toggle-btn" onclick="toggleMode()">🌙 Dark</button>
+
+    <div class="weather-card">
+        <h2>Weather Checker</h2>
+
+    <select id="citySelect">
+        <option value="">-- Choose a City --</option>
+
+        <option value="Phnom Penh">Phnom Penh</option>
+        <option value="Banteay Meanchey">Banteay Meanchey</option>
+        <option value="Battambang">Battambang</option>
+        <option value="Kampong Cham">Kampong Cham</option>
+        <option value="Kampong Chhnang">Kampong Chhnang</option>
+        <option value="Kampong Speu">Kampong Speu</option>
+        <option value="Kampong Thom">Kampong Thom</option>
+        <option value="Kampot">Kampot</option>
+        <option value="Kandal">Kandal</option>
+        <option value="Kep">Kep</option>
+        <option value="Koh Kong">Koh Kong</option>
+        <option value="Kratie">Kratie</option>
+        <option value="Mondulkiri">Mondulkiri</option>
+        <option value="Oddar Meanchey">Oddar Meanchey</option>
+        <option value="Pailin">Pailin</option>
+        <option value="Preah Sihanouk">Preah Sihanouk</option>
+        <option value="Preah Vihear">Preah Vihear</option>
+        <option value="Prey Veng">Prey Veng</option>
+        <option value="Pursat">Pursat</option>
+        <option value="Ratanakiri">Ratanakiri</option>
+        <option value="Siem Reap">Siem Reap</option>
+        <option value="Stung Treng">Stung Treng</option>
+        <option value="Svay Rieng">Svay Rieng</option>
+        <option value="Takeo">Takeo</option>
+        <option value="Tboung Khmum">Tboung Khmum</option>
+    </select>
+
+
+        <button onclick="getWeather()">Check Weather</button>
+
+        <div class="weather-info" id="weatherInfo">
+            <div class="icon" id="weatherIcon"></div>
+
+            <div class="info">
+                <p id="time"></p>
+                <p id="temp"></p>
+                <p id="humidity"></p>
+                <p id="condition"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('light-mode');
+            const btn = document.querySelector('.toggle-btn');
+            
+            if (document.body.classList.contains('light-mode')) {
+                btn.textContent = '☀️ Light';
+                localStorage.setItem('mode', 'light');
+            } else {
+                btn.textContent = '🌙 Dark';
+                localStorage.setItem('mode', 'dark');
+            }
+        }
+
+        // Load saved mode on page load
+        window.addEventListener('load', () => {
+            const savedMode = localStorage.getItem('mode');
+            if (savedMode === 'light') {
+                document.body.classList.add('light-mode');
+                document.querySelector('.toggle-btn').textContent = '☀️ Light';
+            }
+        });
+
+        async function getWeather() {
+            const API_KEY = "cd036622db468f3f5317dcb603547991"; 
+            const citySelect = document.getElementById("citySelect").value;
+            
+            const city = citySelect;
+
+            if (!city) {
+                alert("Please select or enter a city.");
+                return;
+            }
+
+            const url = 
+              `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.cod !== 200) {
+                    alert("City not found!");
+                    return;
+                }
+
+                const time = new Date(data.dt * 1000).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+                displayWeather({
+                    time: time,
+                    temp: data.main.temp + "°C",
+                    humidity: data.main.humidity + "%",
+                    condition: data.weather[0].main,
+                    icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+                });
+
+            } catch (error) {
+                alert("Error fetching weather data!");
+            }
+        }
+
+        function displayWeather(data) {
+            document.getElementById("weatherInfo").style.display = "block";
+
+            document.getElementById("time").textContent = data.time;
+            document.getElementById("temp").textContent = "Temperature: " + data.temp;
+            document.getElementById("humidity").textContent = "Humidity: " + data.humidity;
+            document.getElementById("condition").textContent = "Condition: " + data.condition;
+
+            document.getElementById("weatherIcon").innerHTML =
+                `<img src="${data.icon}" alt="Weather Icon">`;
+        }
+    </script>
+
+</body>
+</html>
