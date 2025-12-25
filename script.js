@@ -12,7 +12,7 @@ checkWeatherBtn.addEventListener('click', getWeather);
 
 // Fetch weather data
 async function getWeather() {
-    const API_KEY = "cd036622db468f3f5317dcb603547991";
+    const API_KEY = "API_KEY";
     const city = document.getElementById("citySelect").value;
 
     if (!city) {
