@@ -12,7 +12,7 @@ checkWeatherBtn.addEventListener('click', getWeather);
 
 // Fetch weather data
 async function getWeather() {
-    const API_KEY = "API_KEY";
+    const API_KEY = "YOUR_API_KEY_HERE";
     const city = document.getElementById("citySelect").value;
 
     if (!city) {
@@ -46,4 +46,5 @@ async function getWeather() {
         alert("Error fetching weather data!");
         console.error(error);
     }
+
 }
