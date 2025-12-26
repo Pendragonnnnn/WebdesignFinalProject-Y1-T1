@@ -1,4 +1,3 @@
-// Theme toggle functionality
 const themeBtn = document.getElementById('themeToggle');
 
 themeBtn.addEventListener('click', () => {
@@ -6,13 +5,11 @@ themeBtn.addEventListener('click', () => {
     themeBtn.textContent = isLight ? '☀️' : '🌙';
 });
 
-// Weather check button
 const checkWeatherBtn = document.getElementById('checkWeatherBtn');
 checkWeatherBtn.addEventListener('click', getWeather);
 
-// Fetch weather data
 async function getWeather() {
-    const API_KEY = "YOUR_API_KEY_HERE";
+    const API_KEY = "cd036622db468f3f5317dcb603547991";
     const city = document.getElementById("citySelect").value;
 
     if (!city) {
@@ -46,5 +43,4 @@ async function getWeather() {
         alert("Error fetching weather data!");
         console.error(error);
     }
-
 }
